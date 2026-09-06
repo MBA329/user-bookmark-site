@@ -1,0 +1,63 @@
+{
+  "collections": [
+    {
+      "id": "f242b138-e3df-4ec7-a560-49d67d2c2496",
+      "name": "first collection"
+    },
+    {
+      "id": "cd57fdee-e475-4832-a777-216461ed1ce8",
+      "name": "value1"
+    },
+    {
+      "id": "efda810d-ce95-476a-bc47-73c6f1eeaa03",
+      "name": "value1"
+    },
+    {
+      "id": "0c0c4bb9-359e-4f59-a024-58d8d6d8392d",
+      "name": "value1"
+    },
+    {
+      "id": "f4983737-3eaa-4864-83d5-0da2e7d338d6",
+      "name": "new value"
+    }
+  ],
+  "bookmarks": [
+    {
+      "id": "73a7781f-9be2-4db2-afc7-a7a9a57f49a7",
+      "collectionId": "0c0c4bb9-359e-4f59-a024-58d8d6d8392d",
+      "url": "learnrust.org",
+      "tags": [
+        "bun",
+        "rust",
+        "html"
+      ]
+    },
+    {
+      "id": "f54a6590-be25-41e1-8c54-5276ad3f9790",
+      "collectionId": ":collectionId",
+      "url": "titk-tok.com",
+      "title": "enable user fieldname",
+      "tags": 90
+    },
+    {
+      "id": "orin6ss",
+      "collectionId": {
+        "collectionId": "efda810d-ce95-476a-bc47-73c6f1eeaa03"
+      },
+      "url": "https://leetcode.com",
+      "title": "leetcode",
+      "tags": [
+        "problems"
+      ]
+    },
+    {
+      "id": "jxa4v6g",
+      "collectionId": {
+        "collectionId": "efda810d-ce95-476a-bc47-73c6f1eeaa03"
+      },
+      "url": "https://leetcode.com",
+      "title": "leetcode",
+      "tags": 9
+    }
+  ]
+}
