@@ -10,3 +10,9 @@ export interface Collection {
   name : string;
   id:string;
 }
+
+export interface SessionData {
+  userId: string;
+  role: string;
+  createdAt: Date;
+}
