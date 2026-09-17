@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmark App</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2em;
+        }
+        .container {
+            display: flex;
+            gap: 2em;
+        }
+        .form-container, .bookmarks-container {
+            border: 1px solid #ccc;
+            padding: 1em;
+            border-radius: 5px;
+        }
+        .form-group {
+            margin-bottom: 1em;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5em;
+        }
+        input {
+            padding: 0.5em;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 0.5em 1em;
+            cursor: pointer;
+        }
+        #bookmarks-list {
+            list-style: none;
+            padding: 0;
+        }
+        #bookmarks-list li {
+            margin-bottom: 0.5em;
+            padding: 0.5em;
+            border: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .bookmark-actions button {
+            margin-left: 0.5em;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bookmark App</h1>
+    <div class="container">
+        <div class="form-container" id="login-container">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <p id="login-message"></p>
+        </div>
+
+        <div class="bookmarks-container" id="bookmarks-container" style="display: none;">
+            <h2>My Bookmarks</h2>
+            <button id="logout-button">Logout</button>
+            <div class="form-group">
+                <label for="new-bookmark-url">New Bookmark URL:</label>
+                <input type="url" id="new-bookmark-url" required>
+                <button id="add-bookmark-button">Add</button>
+            </div>
+            <ul id="bookmarks-list"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

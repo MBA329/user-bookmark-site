@@ -1,5 +1,5 @@
-import { Bookmark } from "../types";
-import {getDb,saveDb} from "./db.services"
+import { Bookmark } from "../../types";
+import {getDb,saveDb} from "../../services/db.services"
 
 const generateId = ()=> Math.random().toString(36).substring(2,9);
 

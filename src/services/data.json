@@ -1,24 +1,25 @@
 {
   "collections": [
     {
-      "id": "f242b138-e3df-4ec7-a560-49d67d2c2496",
-      "name": "first collection"
+      "id": "ef372a9f-c19e-4c12-9fff-10a5036991c1",
+      "name": "second collection",
+      "createdAt": "2026-09-14T14:52:39.860Z"
     },
     {
-      "id": "cd57fdee-e475-4832-a777-216461ed1ce8",
-      "name": "value1"
+      "id": "363efbc7-c08a-4aaf-87a4-510d88d794f7",
+      "name": "third collection",
+      "createdAt": "2026-09-14T14:54:05.012Z"
     },
     {
-      "id": "efda810d-ce95-476a-bc47-73c6f1eeaa03",
-      "name": "value1"
+      "id": "ad7dddee-eaf2-41d7-a0f1-296151175cff",
+      "name": "fourth collection",
+      "createdAt": "2026-09-14T14:56:17.825Z"
     },
     {
-      "id": "0c0c4bb9-359e-4f59-a024-58d8d6d8392d",
-      "name": "value1"
-    },
-    {
-      "id": "f4983737-3eaa-4864-83d5-0da2e7d338d6",
-      "name": "new value"
+      "userId": "user_4",
+      "id": "65467a40-bf33-45a8-90d7-34bea4ac4336",
+      "name": "fifth collection",
+      "createdAt": "2026-09-14T15:02:04.445Z"
     }
   ],
   "bookmarks": [
@@ -26,6 +27,7 @@
       "id": "73a7781f-9be2-4db2-afc7-a7a9a57f49a7",
       "collectionId": "0c0c4bb9-359e-4f59-a024-58d8d6d8392d",
       "url": "learnrust.org",
+      "title": "Learn Rust",
       "tags": [
         "bun",
         "rust",
@@ -34,16 +36,16 @@
     },
     {
       "id": "f54a6590-be25-41e1-8c54-5276ad3f9790",
-      "collectionId": ":collectionId",
+      "collectionId": "f242b138-e3df-4ec7-a560-49d67d2c2496",
       "url": "titk-tok.com",
       "title": "enable user fieldname",
-      "tags": 90
+      "tags": [
+        "social"
+      ]
     },
     {
       "id": "orin6ss",
-      "collectionId": {
-        "collectionId": "efda810d-ce95-476a-bc47-73c6f1eeaa03"
-      },
+      "collectionId": "efda810d-ce95-476a-bc47-73c6f1eeaa03",
       "url": "https://leetcode.com",
       "title": "leetcode",
       "tags": [
@@ -52,12 +54,32 @@
     },
     {
       "id": "jxa4v6g",
-      "collectionId": {
-        "collectionId": "efda810d-ce95-476a-bc47-73c6f1eeaa03"
-      },
+      "collectionId": "efda810d-ce95-476a-bc47-73c6f1eeaa03",
       "url": "https://leetcode.com",
       "title": "leetcode",
-      "tags": 9
+      "tags": [
+        "problems"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "user_1",
+      "username": "alex",
+      "password": "password123",
+      "role": "user"
+    },
+    {
+      "id": "user_2",
+      "username": "admin",
+      "password": "adminpassword",
+      "role": "admin"
+    },
+    {
+      "id": "user_3",
+      "username": "admin",
+      "password": "nonadminpassword",
+      "role": "user"
     }
   ]
 }
