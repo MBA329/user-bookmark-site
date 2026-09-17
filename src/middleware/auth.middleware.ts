@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { sessions } from "../../services/session.service";
+import { sessions } from "@/modules/auth/session.service";
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   const sessionId = req.cookies?.sid;

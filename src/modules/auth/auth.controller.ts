@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import crypto from "node:crypto";
-import { sessions, USERS } from "../../services/session.service";
+import { sessions, USERS } from "./session.service";
 import bcrypt from 'bcryptjs'
 
 export const login = (req: Request, res: Response) => {

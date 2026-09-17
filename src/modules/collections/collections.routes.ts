@@ -5,7 +5,7 @@ import {
   createCollection,
   deleteCollection,
 } from "./collections.controller";
-import { requireAuth } from "../../api/middleware/auth.middleware";
+import { requireAuth } from "@/middleware/auth.middleware";
 
 export const collectionsRouter = express.Router();
 

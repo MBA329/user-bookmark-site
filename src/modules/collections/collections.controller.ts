@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { collectionService } from "./collections.service";
 import { SessionData } from "../../types";
-import { sessions } from "../../services/session.service";
+import { sessions } from "../auth/session.service";
 
 
 export const getAllCollections = async (req: Request, res: Response) => {

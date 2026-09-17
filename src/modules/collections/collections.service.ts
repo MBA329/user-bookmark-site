@@ -1,5 +1,5 @@
 import { Collection } from "../../types";
-import { getDb, saveDb } from "../../services/db.services";
+import { getDb, saveDb } from "@/database/jsonDb";
 
 const generateId = () => crypto.randomUUID();
 
