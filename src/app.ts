@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { bookmarkRouter } from './modules/bookmarks/bookmark.route'
-import { authRouter } from './modules/auth/login.routes'
+import { authRouter } from './modules/auth/auth.routes'
 import { collectionsRouter } from './modules/collections/collections.routes'
 import cookieParser from 'cookie-parser'
 import { SessionData } from './types'

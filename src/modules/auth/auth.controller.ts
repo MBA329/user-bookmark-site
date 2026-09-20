@@ -1,18 +1,22 @@
 import { Request, Response } from "express";
 import crypto from "node:crypto";
-import { sessions, USERS } from "./session.service";
+import { sessions} from "./session.service";
+import {db} from "../../database/db"
 import bcrypt from 'bcryptjs'
 
-export const login = (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
-  const user = USERS.find((u) => u.username === username);
- 
-  if (!user || user.password !== password) {
-    return res
-      .status(401)
-      .json({ error: "invalid username or password combination" });
-  }
+const user = await db.selectFrom("users")
+.selectAll()
+.where("username", "=",username)
+.executeTakeFirst();
+
+const isPasswordValid = user? await bcrypt.compare(password,user.password) : false;
+
+if (!user || !isPasswordValid){
+  return res.status(401).json({message:"authentication failed: incorrect username or password combination",username:username,password:password})
+}
   const sessionId = crypto.randomUUID();
 
   sessions[sessionId] = {
@@ -25,7 +29,7 @@ export const login = (req: Request, res: Response) => {
   res.cookie("sid", sessionId, {
     httpOnly: true,
     secure: false,
-    sameSite: "lax",
+    sameSite: "none",
     maxAge: 15 * 60 * 1000,
   });
 
@@ -40,7 +44,8 @@ export const logout = (req: Request, res: Response) => {
   res.clearCookie("sid");
   res.json({ message: "Logged out successfully" });
 };
-export const signUp = (req: Request, res: Response) => {
+
+export const signUp = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   
 
@@ -49,13 +54,25 @@ export const signUp = (req: Request, res: Response) => {
       .status(400)
       .json({ message: "bad request username or password must be a string" });
   }
-  USERS.push(
-    {id: crypto.randomUUID(),
-      username:username,
-      password:password,
-      role:"user"
 
-    })
+  const usernameTaken = await db.selectFrom("users")
+  .selectAll()
+  .where("username","=",username)
+  .executeTakeFirst()
+
+  if(usernameTaken){
+    return res.status(409).json({error:"username already exists try something else"})
+  }
+
+   const hashedPassword = await bcrypt.hash(password,10)
+  await db 
+  .insertInto("users")
+  .values({
+    id: crypto.randomUUID(),
+    username,
+    password:hashedPassword,
+    role:"user"
+  }).execute()
     return res.status(201).json({message:"sign-up successful"})
 };
 

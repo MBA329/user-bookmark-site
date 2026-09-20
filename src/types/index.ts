@@ -1,16 +1,19 @@
+import { Generated } from "kysely";
+
 export interface Bookmark {
   id: string;
   collectionId: string;
   url: string;
   title: string;
   tags: string[];
+  created_at:string;
 }
 
 export interface Collection {
-  userId: string;
+  user_id: string;
   name : string;
   id:string;
-  createdAt: Date
+  created_at: string;
 }
 
 export interface SessionData {
@@ -25,6 +28,4 @@ export interface User {
   name: string;
   role: string;
   passwordHash: string;
-  
-
 }

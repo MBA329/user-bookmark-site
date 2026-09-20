@@ -1,5 +1,5 @@
 import { Collection } from "../../types";
-import { getDb, saveDb } from "@/database/jsonDb";
+import { db } from "@/database/db";
 
 const generateId = () => crypto.randomUUID();
 
@@ -11,39 +11,71 @@ const validateCollection = (name: any) => {
 
 export const collectionService = {
   getAllCollections: async (): Promise<Collection[]> => {
-    const db = await getDb();
-    return db.collections;
+   const query = await db.selectFrom("collections")
+   .selectAll()
+   .execute()
+  
+   return query.map((qr)=>({
+    ...qr,
+    created_at: qr.created_at.toISOString()
+   }))
   },
 
-  getCollectionById: async (id: string): Promise<Collection | null> => {
-    const db = await getDb();
-    const collection = db.collections.find((col) => col.id === id);
-    return collection || null;
+  getCollectionById: async (id: string): Promise<Collection | null > => {
+   const collection = await db.selectFrom("collections")
+   .selectAll()
+   .where("id","=",id)
+   .executeTakeFirst()
+   
+   if (!collection){
+    return null
+   }
+   
+  return {
+    ...collection,
+    created_at: collection.created_at.toISOString()
+  }
   },
 
   createCollection: async (name: string,id:string): Promise<Collection> => {
     validateCollection(name);
-    const db = await getDb();
-    const newCollection: Collection = {
-      userId:id,
-      id: generateId(),
-      name: name.trim(),
-      createdAt: new Date()
-    };
-    db.collections.push(newCollection);
-    await saveDb(db);
-    return newCollection;
+    const collection = await db.insertInto("collections")
+    .values({
+     id:generateId(),
+     name,
+     user_id:id
+    })
+    .returningAll()
+    .executeTakeFirstOrThrow()
+
+    return {
+      ...collection,
+      created_at:collection.created_at.toISOString()
+    }
   },
 
   deleteCollection: async (id: string): Promise<boolean> => {
-    const db = await getDb();
-    const initialLength = db.collections.length;
-    db.collections = db.collections.filter((col) => col.id !== id);
+    const result = await db.deleteFrom("collections")
+    .where("id","=",id)
+    .executeTakeFirst()
 
-    if (db.collections.length < initialLength) {
-      await saveDb(db);
-      return true;
-    }
-    return false;
+    return result.numDeletedRows > 0
   },
+
+  updateCollection : async (id:string,data:Omit<Partial<Collection>,'created_at'| 'user_id'>):Promise<Collection | null>=>{
+      const collection = await db.updateTable('collections')
+      .set(data)
+      .where("id","=",id)
+      .returningAll()
+      .executeTakeFirst()
+
+      if (!collection){
+        return null
+      }
+
+      return {
+        ...collection,
+        created_at:collection.created_at.toISOString()
+      }
+  }
 };

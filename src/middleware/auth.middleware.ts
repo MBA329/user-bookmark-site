@@ -9,15 +9,12 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
       .status(401)
       .json({ error: "Unauthorized: No session cookie provided" });
   }
-
   const session = sessions[sessionId];
   if (!session) {
     return res
       .status(401)
       .json({ error: "unauthorized: Invalid or expired session" });
   }
-  
-
   if (Date.now()>session.expiresAt){
     delete sessions[sessionId];
     res.clearCookie("sid");

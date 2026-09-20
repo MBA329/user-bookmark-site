@@ -1,36 +1,50 @@
 import { Bookmark } from "../../types";
-import {getDb,saveDb} from "@/database/jsonDb"
+import {db} from "@/database/db";
+import { Kysely,sql,SqlBool } from "kysely";
+
 
 const generateId = ()=> Math.random().toString(36).substring(2,9);
 
 export const bookmarkService = {
   
   getAllbookmarks: async(tagfilter?:string):Promise<Bookmark[]>=>{
-    const db = await getDb();
-    let bookmarks = db.bookmarks;
+    
+    let query  = db.selectFrom("bookmarks").selectAll()
 
     if (tagfilter){
-     bookmarks = bookmarks.filter((bk)=>{
-      return bk.tags.some(tag => tag.toLowerCase() === tagfilter.toLowerCase())
-     });
-    }
-    return bookmarks
+  query = query.where(sql<SqlBool>`${sql.val(tagfilter)} = ANY(tags)`)
+     };
+
+     const bookmarks = await query.execute();
+     return bookmarks.map((bk)=>({
+      ...bk,
+      created_at: bk.created_at.toISOString()
+     }));
+   
+    
   },
 
   getBookmarkById: async(id:string):Promise<Bookmark | null>=>{
-    const db = await getDb();
+    
+    const bookmark = await db 
+    .selectFrom("bookmarks")
+    .selectAll()
+    .where("id","=",id)
+    .executeTakeFirst();
 
-    const bookmark = db.bookmarks.find((bk)=> bk.id === id)
-    return bookmark || null;
+
+    if (!bookmark){
+      return null;
+    }
+
+    return {
+      ...bookmark,
+      created_at:bookmark.created_at.toISOString()
+    }
   },
 
-  updateBookmark: async(id:string,updates:Partial<Bookmark>): Promise<Bookmark | null> =>{
-    const db = await getDb();
-    const bookmarkIndex = db.bookmarks.findIndex((bk)=> bk.id === id);
-
-    if (bookmarkIndex === -1){
-      return null
-    }
+  updateBookmark: async(id:string,updates:Omit<Partial<Bookmark>, 'created_at'|'id'>): Promise<Bookmark | null> =>{
+   
 
     if (updates.url && typeof updates.url !== "string"){
       throw new Error("Vallidation Error: url must be a string");
@@ -42,39 +56,43 @@ export const bookmarkService = {
       throw new Error("Validation error tags cannot be empty")
     }
 
-    const updateBookmark = {
-      ...db.bookmarks[bookmarkIndex],
-      ...updates,
-    } as Bookmark;
-    db.bookmarks[bookmarkIndex] = updateBookmark
+    const updatedBookmark = await db.updateTable("bookmarks")
+    .set(updates)
+    .where("id","=",id)
+    .returningAll()
+    .executeTakeFirst();
 
-    await saveDb(db)
-    return updateBookmark 
+    if (!updatedBookmark){
+      return null
+    }
+
+    return {
+      ...updatedBookmark,
+      created_at: updatedBookmark.created_at.toISOString()
+    }
   },
 
-  createBookmark: async(data:Omit<Bookmark,'id'>):Promise<Bookmark>=>{
-    const db = await getDb();
+  createBookmark: async(data:Omit<Bookmark,'id' | 'created_at'>):Promise<Bookmark>=>{
+    const newBookmark = await db.insertInto("bookmarks")
+    .values({
+      id:generateId(),
+    ...data,
+    }).returningAll()
+    .executeTakeFirstOrThrow()
 
-    const newBookmark = {
-      id : generateId(),
-      ...data
-    };
+   return {
+    ...newBookmark,
+    created_at: newBookmark.created_at.toISOString()
+   }
 
-    db.bookmarks.push(newBookmark);
-    await saveDb(db);
-    return newBookmark
   },
   deleteBookmark: async(id:string):Promise<boolean>=>{
-    const db = await getDb();
-    const initialLength = db.bookmarks.length
+    const result = await db
+    .deleteFrom("bookmarks")
+    .where("id", "=",id)
+    .execute()
 
-    db.bookmarks = db.bookmarks.filter((bk)=> bk.id !== id);
-
-    if (db.bookmarks.length < initialLength) {
-      await saveDb(db)
-      return true
-    }
-   return false
-  }
+    return result.length > 0
 }
 
+}

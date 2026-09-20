@@ -1,7 +1,8 @@
 import {app} from './app'
-const PORT = 3000
+import {env} from "./config/env"
 
 
-app.listen(PORT, () => {
-  console.log("server listening on http://localhost:3000");
+
+app.listen(env.port, () => {
+  console.log(`server listening on http://localhost:${env.port}`);
 });

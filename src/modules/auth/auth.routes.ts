@@ -4,6 +4,7 @@ import {
   logout,
   getMe,
   signUp,
+ 
 } from "./auth.controller";
 import { requireAuth } from "@/middleware/auth.middleware";
 

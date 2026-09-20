@@ -5,7 +5,6 @@ import { sessions } from "../auth/session.service";
 
 
 export const getAllCollections = async (req: Request, res: Response) => {
-  const id = req.user?.userId 
   try {
     const collections = await collectionService.getAllCollections();
     res.json(collections);
@@ -32,8 +31,7 @@ export const getCollectionById = async (req: Request, res: Response) => {
 export const createCollection = async (req: Request, res: Response) => {
   try {
     const { name } = req.body;
-    const session = req?.cookies.sid
-    const id = sessions[session]?.userId as string
+    const id = req.user?.userId as string
     const newCollection = await collectionService.createCollection(name,id);
     res.status(201).json(newCollection);
   } catch (error: any) {
@@ -59,3 +57,20 @@ export const deleteCollection = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const updateCollection = async(req:Request,res:Response)=>{
+  try{
+    const id = req.params.id as string
+    const data = req.body
+    const updatedCollection = await collectionService.updateCollection(id,data)
+
+    if (!updatedCollection){
+      return res.status(400).json({error:"bad request"})
+    }
+    return res.status(200).json(updatedCollection)
+  }
+  catch(error){
+     console.error(error)
+     res.status(500).json({error:"Internal server error"})
+  }
+}
